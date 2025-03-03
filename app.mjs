@@ -20,5 +20,11 @@ app.get("/", (req, res) => {
 });
 io.on("connection", (socket) => {
   console.log("Connected");
+  socket.on("send-location", (data) => {
+    io.emit("recieve-location", { id: socket.id, ...data });
+  });
+  socket.on("disconnect", () => {
+    io.emit("user-disconnected", socket.id);
+  });
 });
 server.listen(PORT, () => console.log(`PORT is running on ${PORT}`));
